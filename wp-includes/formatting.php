@@ -243,6 +243,7 @@ function _wptexturize_pushpop_element($text, &$stack, $disabled_elements, $openi
  * @return string Text which has been converted into correct paragraph tags.
  */
 function wpautop($pee, $br = true) {
+//	return $pee; // denis - this adds useless <br /> where it should not. Breaks the indentation (in TinyMCE), etc
 	$pre_tags = array();
 
 	if ( trim($pee) === '' )
@@ -2796,7 +2797,7 @@ function wp_richedit_pre($text) {
 		 */
 		return apply_filters( 'richedit_pre', '' );
 	}
-
+	
 	$output = convert_chars($text);
 	$output = wpautop($output);
 	$output = htmlspecialchars($output, ENT_NOQUOTES, get_option( 'blog_charset' ) );
