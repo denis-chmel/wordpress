@@ -207,3 +207,29 @@ if ( is_page_template( 'page_landing.php' ) && is_active_sidebar('before-footer'
      }
  
 }
+
+add_editor_style(array('landing/css/bootstrap.css', 'landing/css/main.css'));
+
+function denis_tinymce_config( $init ) {
+	$init = array_merge($init, array(
+		'valid_elements' => '*[*]',
+		'extended_valid_elements' => '*[*]',
+		'remove_linebreaks' => false,
+		'convert_newlines_to_brs' => true,
+		'remove_redundant_brs' => false,
+		'apply_source_formatting' => false,
+		'preformatted' => true,
+		'wpautop' => false,
+		// ------------------------------- 
+		'convert_fonts_to_spans' => false,
+		'verify_html' => false,
+		'fix_list_elements' => false,
+		'forced_root_block' => false,
+		'invalid_elements' => '',
+		'invalid_styles' => '',
+		'keep_styles' => true,
+	));
+
+	return $init;
+}
+add_filter('tiny_mce_before_init', 'denis_tinymce_config');
