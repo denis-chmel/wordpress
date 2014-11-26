@@ -1,0 +1,219 @@
+<html>
+<head>
+	<script type="text/javascript" src="//code.jquery.com/jquery-compat-git.js"></script>
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<style type="text/css">
+		body{margin: 10px}
+		h4{margin-top:25px}
+		h1{font-size:0}
+		h1:before{content:"predict demo";display:block;padding-left:135px;width:200px;height:35px;line-height:1.2;font-size:12px;color:#AAA;background:url(https://www.gobask.com/release/img/logo-white.png) no-repeat}
+		#request,#response{font:12px monospace;white-space:pre;padding:5px;height:16em;overflow-y:scroll}
+		#response{height:100em;background:#FAFAFA}
+		#request{width:100%;border:1px solid silver;border-radius:4px;resize:vertical}
+		#dishes{overflow:hidden;overflow-y:auto;min-height:400px;border-radius:6px}
+		#template{display:none}
+		.dish{margin-bottom:15px;padding:10px;border:2px solid #DDD;border-radius:6px;background:#FAFAFA}
+		.dish .restaurant{padding:5px 0;border-left:1px dotted silver;text-align:center}
+		.dish *{line-height:1.3}
+		.dish .description{min-height:50px}
+		.dish h5{font-size:16px;margin-top:0}
+		.dish a{text-decoration:underline;font-size:13px}
+		.dish .restaurant-image{height:60px;width:60px;border-radius:50%;padding:6px;margin:0 10px 5px 0;background:#FFF}
+		.dish .btn-light{background:#EEE}
+		body:after{-webkit-transition:all 500ms;-moz-transition:all 500ms;-o-transition:all 500ms;transition:all 500ms;content:"The request was updated, see new recommendations.";color:#FFF;padding-top:20px;text-align:center;display:block;position:fixed;height:65px;left:0;right:0;top:-100%;font-size:18px;background:#5cb85c;z-index:100;opacity:.8}
+		body.success:after{top:0;opacity:1}
+		.help{color:#AAA;font-size:15px}
+		.error{color:red}
+		label{font-weight:400}
+		.nowrap{white-space:nowrap}
+		.dish button{margin-top:5px}
+		.dish .restaurant-name{font-size:12px}
+		.dish .restaurant,.dish .restaurant a{color:#999}
+		.dish .price{padding-left:5px;color:#6f9235}
+	</style>
+</head>
+<body>
+
+<div class="container">
+
+	<h1>Bask</h1>
+	<h4>Your Address</h4>
+
+	<form class="input-group" action="http://ben-api.gobask.com/v1/recommendations">
+
+		<input type="text" class="form-control address-input" size="40" name="address" value="235 E. 49th St NY, NY 10017" />
+		<span class="input-group-btn">
+			<button class="btn btn-success" type="submit">Discover</button>
+		</span>
+	</form>
+
+	<div class="row">
+		<div class="col-xs-6">
+			<h4>Your Recommendations</h4>
+			<p><label><input id="healthy" type="checkbox" /> Get only healthy dishes</label></p>
+			<div id="dishes">
+				<span style="color: silver">Submit a search</span>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<h4>Request</h4>
+			<p class="help">(editable, click discover to re-send)</p>
+			<textarea id="request">
+				{
+				"location": "235 E. 49th St NY, NY 10017",
+				"min_price": 5.99,
+				"user": {
+				"liked": [],
+				"disliked": [],
+				"favorited": [],
+				"ordered": []
+				},
+				"client_id": "e2e4df10d86a8e39fc10157e0a49f055"
+				}
+			</textarea>
+			<h4>Response</h4>
+			<pre id="response"></pre>
+		</div>
+	</div>
+
+	<div id="template" class="dish card">
+		<div class="row">
+			<div class="col-xs-8">
+				<h5>
+					<span class="name">Test name</span>
+					<span class="price">$1</span>
+				</h5>
+				<p class="description">Test descriptions</p>
+				<button class="btn btn-primary" update-section="ordered">Order</button>
+				<button class="btn btn-light" update-section="favorited" title="Add to favorites">
+					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+				</button>
+				<span class="nowrap">
+					<button class="btn btn-light" update-section="liked" title="Like">
+						<span class="glyphicon glyphicon-thumbs-up"></span>
+					</button>
+					<button class="btn btn-light" update-section="disliked" title="Dislike">
+						<span class="glyphicon glyphicon-thumbs-down"></span>
+					</button>
+				</span>
+			</div>
+			<div class="col-xs-4 restaurant">
+				<p class="restaurant-name"></p>
+				<img class="restaurant-image" src="" title="" /><br>
+				<a class="menu" href="#menu">See full menu</a>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+	$("form").submit(function(){
+		try {
+			var request = JSON.parse($("#request").val());
+		} catch(e) {
+			alert('Request JSON ' + e);
+			return;
+		}
+		$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
+		$.post($(this).attr('action'), request, function(a,b,c) {
+			var response;
+			$("#dishes").empty();
+			if (typeof a === 'object') {
+				response = JSON.stringify(a, undefined, 4);
+			} else {
+				// No error code, but response is not JSON. Show as it is.
+				response = $('<div/>').html(c.responseText).text();
+				$("#dishes").html(c.responseText);
+			}
+			$("#response").html(response);
+			if (a.error) {
+				$("#dishes").html("Got an error: " + a.error);
+				return;
+			}
+			$(a.dishes).each(
+					function(i, dish) {
+						var $dish = $("#template").clone();
+						$dish.attr('id', dish.id);
+						$dish.attr('restaurant-id', dish.restaurant.id);
+						$dish.find(".name").html(dish.name);
+						$dish.find(".price").html(dish.price);
+						$dish.find(".description").html(dish.description);
+						$dish.find(".restaurant-name").html(dish.restaurant.name);
+						$dish.find(".restaurant-image").attr("src", dish.restaurant.image).attr("title", dish.restaurant.name);
+						$("#dishes").append($dish);
+					}
+			);
+
+		}).fail(function(response) {
+			$("#dishes").html('<span class=error>' + response.responseJSON.error + '</span>');
+			$("#response").html(response.responseText);
+		});
+
+		return false;
+	});
+
+	$("#healthy").on("click", function(){
+		var json = JSON.parse($("#request").val());
+		json.healthy = this.checked ? 1 : 0;
+		resubmit(json);
+	});
+
+	function resubmit(json) {
+		$("#request").val(JSON.stringify(json, undefined, 4));
+		$("form").submit();
+		$("body").addClass("success");
+		clearTimeout(window.timeout_id);
+		window.timeout_id = setTimeout(function(){
+			$("body").removeClass("success");
+		}, 2000);
+	}
+
+	$(document).on("click", ".dish .btn", function(){
+		window.scrollTo(0, 0);
+		var dish_id = $(this).closest(".dish").attr("id");
+		var current_json = JSON.parse($("#request").val());
+		var section = $(this).attr('update-section');
+		current_json.user[section] = current_json.user[section] || [];
+		current_json.user[section].push(dish_id);
+		// Remove duplicates, dislike what was liked etc
+		if (section == 'disliked') {
+			// remove from liked/favorited
+			$.each(current_json.user, function(key,  values) {
+				if (key == 'liked' || key == 'favorited') {
+					current_json.user[key] = values.filter(function(value, index) {
+						return current_json.user[key].indexOf(value) == -1;
+					});
+				}
+			});
+		}
+		// Remove duplicates
+		$.each(current_json.user, function(key,  values) {
+			current_json.user[key] = $.unique(values);
+		});
+		resubmit(current_json);
+	});
+
+	$(".address-input").on('keyup', function() {
+		var current_json = JSON.parse($("#request").val());
+		current_json.location = $(this).val();
+		$("#request").val(JSON.stringify(current_json, undefined, 4));
+	});
+
+	$(document).on("click", ".dish .menu", function(){
+		var current_json = JSON.parse($("#request").val());
+		var restaurant_id = $(this).closest(".dish").attr("restaurant-id");
+		current_json.restaurants = [restaurant_id];
+		current_json.limit = null;
+		$("#request").val(JSON.stringify(current_json, undefined, 4));
+		$("form").submit();
+		return false;
+	});
+
+	$("form").submit();
+
+</script>
+
+</body>
+</html>
