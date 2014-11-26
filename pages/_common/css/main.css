@@ -30,10 +30,11 @@ hr {
 }
 .entree-navbar .navbar-header .navbar-brand {
   font-size: 0;
-  width: 130px;
-  margin-left: -65px;
-  height: 67px;
-  background: url(../img/landing-sprites.png) 135px 75px;
+  margin-left: -61px;
+  width: 122px;
+  height: 26px;
+  background: url(../img/logo.png) top left no-repeat;
+  margin-top: 12px;
 }
 .leave-email {
   max-width: 420px;

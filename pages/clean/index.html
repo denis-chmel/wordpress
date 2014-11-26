@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="...">
+	<meta name="keywords" content="...">
+
+	<title>Introducing Bask</title>
+
+	<link rel="stylesheet" href="http://www.gobask.com/blog/wp-content/themes/agency-pro/landing/css/bootstrap.css" type="text/css" media="all"/>
+
+	<link href="../_common/css/main.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Noto+Serif:400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Ek+Mukta:400,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse entree-navbar" role="navigation">
+	<div class="container">
+		<a href="//www.gobask.com" class="navbar-header full-width text-center">
+			<span class="navbar-brand full-width" href="#">Bask</span>
+		</a>
+	</div>
+</nav>
+
+<div class="jumbotron entree-jumbotron">
+	<div class="container">
+
+		<h1>Introducing Bask</h1>
+
+		<p>Your destination for trusted delivery food.</p>
+		<hr>
+		<p>Please enter your email address below to receive exclusive updates on the launch of Bask, an online food delivery platform launching this Spring.<br />Be the first to know.</p>
+
+		<form class="input-group leave-email" action="http://www.gobask.com/blog/wp-content/themes/agency-pro/landing/subscribe.php">
+			<input name="email" type="text" placeholder="Email Address" class="form-control">
+			<span class="input-group-btn">
+				<button class="btn btn-default btn-warning" type="submit">Go!</button>
+			</span>
+		</form>
+
+	</div>
+</div>
+
+<div class="jumbotron entree-jumbotron backgrounded" style="background-image: url(../_common/img/5.jpg)">
+	<div class="container">
+		<div class="icon-bottle"></div>
+		<h1>No more question marks</h1>
+
+		<p>
+			There are a lot of reasons to question ordering food online. Where is my food coming from? Who is making it? What exactly is in it? It can feel a bit like a leap of faith. But that’s why we’re here. No longer do you have to question that stylized photo of a vanilla-bean yogurt parfait from the bodega on the corner.
+		</p>
+	</div>
+</div>
+
+
+<div class="jumbotron entree-jumbotron backgrounded" style="background-image: url(../_common/img/4.jpg)">
+	<div class="container">
+
+		<div class="icon-plate"></div>
+		<h1>Mystery solved</h1>
+
+		<p>
+			Our detectives work hard to uncover the cleanest and most trustworthy restaurants in your area. We set high standards to bring you only the best of the best. So you can rest easy and eat up.
+		</p>
+	</div>
+</div>
+
+
+<div class="jumbotron entree-jumbotron backgrounded" style="background-image: url(../_common/img/3.jpg)">
+	<div class="container">
+
+		<div class="icon-dish"></div>
+		<h1>Sit back, relax and eat</h1>
+
+		<p>
+			After you select a trusted dish from our hand-picked restaurant options, one of our partner delivery sites will bring your food to your doorstep. Don’t worry about a thing - just be hungry when your food arrives.
+		</p>
+	</div>
+</div>
+
+
+<div class="jumbotron entree-jumbotron">
+	<div class="container">
+		<h1>Coming Spring 2015</h1>
+
+		<p>Be the first to get notified when we launch.</p>
+
+		<form class="input-group leave-email" action="http://www.gobask.com/blog/wp-content/themes/agency-pro/landing/subscribe.php">
+			<input name="email" type="text" placeholder="Email Address" class="form-control">
+			<span class="input-group-btn">
+				<button class="btn btn-default btn-warning" type="submit">Go!</button>
+			</span>
+		</form>
+
+	</div>
+</div>
+
+<nav class="navbar navbar-inverse entree-navbar" role="navigation">
+	<div class="container">
+		<a href="//www.gobask.com" class="navbar-header full-width text-center">
+			<span class="navbar-brand full-width" href="#">Bask</span>
+		</a>
+	</div>
+</nav>
+
+<script type="text/javascript" src="http://www.gobask.com/blog/wp-content/themes/agency-pro/landing/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="http://www.gobask.com/blog/wp-content/themes/agency-pro/landing/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.leave-email input').attr('required', true);
+		$('.leave-email').submit(function(e) {
+			e.preventDefault();
+
+			$('.leave-email').addClass('sending');
+
+			var data = {
+				email: $(this.email).val(),
+				page_title: $('title').text(),
+				page_url: window.location.href
+			};
+
+			$.ajax({
+				type: "POST",
+				url: this.action,
+				crossDomain: true,
+				data: data,
+				success: function (response) {
+					// $("#success-modal").modal();
+					// Thank you, we'll be in touch asap.
+					$('.leave-email').html("<p class='successfully-subscribed'>Thank you, we'll be in touch asap!</p>");
+				},
+				error: function (jqXHR, textStatus) {
+					console.error(jqXHR, textStatus);
+				}
+			});
+
+			return false;
+		});
+	});
+</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-48341855-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
