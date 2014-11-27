@@ -114,7 +114,12 @@
 			<div class="col-xs-4 restaurant">
 				<p class="restaurant-name"></p>
 				<img class="restaurant-image" src="" title="" /><br>
-				<a class="menu" href="#menu">See full menu</a>
+				<div class="see_menu">
+					<a href="#menu">See full menu</a>
+				</div>
+				<div class="unsee_menu">
+					<a href="#menu">Leave restaurant</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -125,12 +130,15 @@
 
 	$("form").submit(function(e){
 		e.preventDefault();
+		window.scrollTo(0, 0);
 		try {
 			var request = JSON.parse($("#request").val());
 		} catch(e) {
 			alert('Request JSON ' + e);
 			return;
 		}
+		$('.unsee_menu').toggle(request.restaurants);
+		$('.see_menu').toggle(!request.restaurants || !request.restaurants.length);
 		$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
 		$.post($("#endpoint").val(), request, function(data) {
 			var response;
@@ -199,7 +207,6 @@
 	}
 
 	$(document).on('click', '.dish .btn', function(){
-		window.scrollTo(0, 0);
 		var dish_id = $(this).closest('.dish').attr('id');
 		var current_json = JSON.parse($('#request').val());
 		var section = $(this).attr('update-section');
@@ -229,14 +236,19 @@
 		$('#request').val(JSON.stringify(current_json, undefined, 4));
 	});
 
-	$(document).on('click', '.dish .menu', function(){
+	$(document).on('click', '.dish .see_menu a', function(e){
+		e.preventDefault();
 		var current_json = JSON.parse($('#request').val());
 		var restaurant_id = $(this).closest('.dish').attr('restaurant-id');
 		current_json.restaurants = [restaurant_id];
-		current_json.limit = null;
-		$('#request').val(JSON.stringify(current_json, undefined, 4));
-		$('form').submit();
-		return false;
+		resubmit(current_json);
+	});
+
+	$(document).on('click', '.dish .unsee_menu a', function(e){
+		e.preventDefault();
+		var current_json = JSON.parse($('#request').val());
+		current_json.restaurants = [];
+		resubmit(current_json);
 	});
 
 </script>
