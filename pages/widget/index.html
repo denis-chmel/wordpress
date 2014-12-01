@@ -53,7 +53,7 @@
 
 			<h4>Personas</h4>
 
-			<p class="help">Switch between fictional users with their own history to check their suggestions.</p>
+			<p class="help">Switch between test users with real history to check their recommendations.</p>
 
 			<div class="btn-group personas">
 				<button type="button" class="btn btn-default active" id="cold-start">
@@ -181,6 +181,7 @@ function addBackgroundEntry(section, dish_id, dish_name) {
 	var $li = $('#li_template').clone();
 	$li.removeAttr('id');
 	$li.attr('dish-id', dish_id);
+	$li.attr('section', section);
 	$li.addClass(section);
 	var icons = {
 		favorited: 'glyphicon-heart',
@@ -305,7 +306,7 @@ $(document).on('click', '.dish .btn', function(){
 $('#user-input').on('click', 'li a', function(e) {
 	e.preventDefault();
 	var $li = $(this).closest('li');
-	var section = $li.find('.section').text();
+	var section = $li.attr('section');
 	var dish_id = $li.attr('dish-id');
 	var json = getCurrentJson();
 	var index = json.user[section].indexOf(dish_id);
@@ -362,9 +363,9 @@ $('.personas').on('click', 'button', function(e){
 	json.user = {};
 	$.each(persona.user, function(section, items) {
 		json.user[section] = [];
-		$.each(items, function(dish_id, dish_name) {
-			json.user[section].push(dish_id);
-			addBackgroundEntry(section, dish_id, dish_name);
+		$.each(items, function(i, dish) {
+			json.user[section].push(dish.id);
+			addBackgroundEntry(section, dish.id, dish.name);
 		});
 	});
 
