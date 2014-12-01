@@ -51,7 +51,18 @@
 	<div class="row">
 		<div class="col-sm-6 left">
 
-			<h4>Your Address</h4>
+			<h4>Personas</h4>
+
+			<p class="help">Switch between fictional users with their own history to check their suggestions.</p>
+
+			<div class="btn-group personas">
+				<button type="button" class="btn btn-default active" id="cold-start">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					Cold Start
+				</button>
+			</div>
+
+			<h4>Address</h4>
 
 			<form class="input-group">
 
@@ -63,25 +74,22 @@
 
 			<p><label><input id="healthy" type="checkbox" /> Get only healthy dishes</label></p>
 
-			<h4>Persona</h4>
+			<h4>Recommendations</h4>
 
-			<p class="help">Switch between fictional users with their own history to check their suggestions.</p>
+			<div id="dishes"></div>
 
-			<div class="btn-group personas">
-				<button type="button" class="btn btn-default active" id="cold-start">
-					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					Cold Start
-				</button>
-			</div>
-
-			<div id="persona-bg">
-				<h4>Background</h4>
-
-				<p class="help empty">No liked, disliked, favorited or ordered items yet.</p>
-				<ul class="list-group"></ul>
-			</div>
+		</div>
+		<div class="col-sm-6">
 
 			<div class="technical well">
+
+				<div id="persona-bg">
+					<h4>User Input</h4>
+
+					<p class="help empty">No liked, disliked, favorited or ordered items yet.</p>
+					<ul class="list-group"></ul>
+				</div>
+
 				<h4>API Endpoint</h4>
 
 				<p>
@@ -107,11 +115,6 @@
 				<pre id="response"></pre>
 			</div>
 
-		</div>
-		<div class="col-sm-6">
-			<h4>Your Recommendations</h4>
-
-			<div id="dishes"></div>
 		</div>
 	</div>
 
@@ -209,6 +212,9 @@ $("form").submit(function(e) {
 		if (data.error) {
 			$("#dishes").html("Got an error: " + data.error);
 			return;
+		}
+		if (!data.dishes.length) {
+			$("#dishes").html('<span class="help">Nothing can be recommended for such request.</span>');
 		}
 		$(data.dishes).each(
 				function(i, dish) {
