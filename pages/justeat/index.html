@@ -116,9 +116,9 @@
 	</div>
 
 	<li id="li_template" class="list-group-item">
+		<a href="#" class="glyphicon glyphicon-remove pull-right"></a>
 		<span class="section glyphicon"></span>
 		<span class="dish-name"></span>
-		<a href="#" class="glyphicon glyphicon-remove pull-right"></a>
 	</li>
 
 	<button id="persona_template" type="button" class="btn btn-default">
@@ -186,7 +186,7 @@
 			ordered: 'glyphicon-shopping-cart'
 		};
 		$li.find('.section').addClass(icons[section]);
-		$li.find('.dish-name').text(dish_name);
+		$li.find('.dish-name').html(dish_name);
 		$("#user-input ul").append($li);
 		$("#user-input .empty").hide();
 	}
