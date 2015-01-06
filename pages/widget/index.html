@@ -233,7 +233,7 @@ $("form").submit(function(e) {
 			$dish.attr('restaurant-id', dish.restaurant.id);
 			$dish.find('.dish-id').text(dish.id);
 			$dish.find('.dish-name').html(dish.name);
-			$dish.find('.price').html(dish.price);
+			$dish.find('.price').html('$' + dish.price);
 			$dish.find('.description').html(dish.description);
 			$dish.find('.restaurant-name').html(dish.restaurant.name);
 			$dish.find('.restaurant-image').attr('src', dish.restaurant.image).attr('title', dish.restaurant.name);
