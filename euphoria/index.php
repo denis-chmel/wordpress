@@ -6,6 +6,7 @@ $url = 'http://0.0.0.0:5555/api/v0.1/parse';
 $raw_response = '';
 $beautified_response = '';
 $error = '';
+$is_one_word = false;
 
 $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : '';
 
@@ -14,6 +15,7 @@ $report_parts = [];
 
 if ($query) {
 	$data = array('query' => $query);
+	$is_one_word = preg_match('#\W#', $query) == 0;
 
 	// use key 'http' even if you send the request to https://...
 	$options = array(
@@ -289,24 +291,33 @@ $questions = [
 			<div id="decomposition" class="<?php echo $query && !$error ? '' : 'hidden' ?>">
 				<h4>Results</h4>
 
-				<div class="well">
-					<p>First we are trying to find how many items it contains. Each item is related to a dish. For example it's a mistake to treat "ham and cheese and desert" as 3 dishes.</p>
-				</div>
+				<?php if ($is_one_word): ?>
 
-				<div class="question-block" for="decomposition">
-					<label class="decomposition">
-						<?php echo $decomposition ?>
-					</label>
+					<p style="margin-bottom: 20px">
+						You are definitely asked for one dish only.<br>
+						<span class="help">(but you may request several at once, just use "and", or comas, or semicolons)</span>
+					</p>
 
-					<p class="question">We believe you have asked for <?php echo sprintf(ngettext('%d dish', '%d dishes', $parts_count), $parts_count) ?>. Correct?</p>
-					<p><span class="ajax-circle hidden"></span><button class="btn btn-default yes-no">Yes</button>&nbsp;<button class="btn btn-default yes-no">No</button></p>
-				</div>
+				<?php else: ?>
+					<div class="well">
+						<p>First we are trying to find how many items it contains. Each item is related to a dish. For example it's a mistake to treat "ham and cheese and desert" as 3 dishes.</p>
+					</div>
+
+					<div class="question-block" for="decomposition">
+						<label class="decomposition">
+							<?php echo $decomposition ?>
+						</label>
+
+						<p class="question">We believe you have asked for <?php echo sprintf(ngettext('%d dish', '%d dishes', $parts_count), $parts_count) ?>. Correct?</p>
+						<p><span class="ajax-circle hidden"></span><button class="btn btn-default yes-no">Yes</button>&nbsp;<button class="btn btn-default yes-no">No</button></p>
+					</div>
+				<?php endif ?>
 			</div>
 
-			<div id="types" class="hidden">
+			<div id="types" class="<?php echo $is_one_word ? '' : 'hidden' ?>">
 
 				<div class="well">
-					<p>We are also detecting whether each part is an</p>
+					<p>Let us detect whether each part is a</p>
 					<ul style="list-style-type: none; padding-left: 15px">
 						<li>dish name<span class="help">&nbsp;&mdash; e.g. ham and cheese</span></li>
 						<li>category<span class="help">&nbsp;&mdash; e.g. desert, pasta, sandwich</span></li>
@@ -315,7 +326,7 @@ $questions = [
 				</div>
 
 				<?php foreach ($parts as $i => $part): ?>
-					<div class="question-block hidden" for="<?php echo $i ?>">
+					<div class="question-block <?php echo $is_one_word ? '' : 'hidden' ?>" for="<?php echo $i ?>">
 						<p class="question"><?php echo $questions[$part['raw_type']] ?></p>
 						<label class="decomposition type">
 							<?php echo $part['html'] ?>
@@ -407,6 +418,9 @@ $questions = [
 			]); ?>;
 			data.url = window.location.href;
 			data.raw_response = <?php echo json_encode($raw_response) ?>;
+			<?php if ($is_one_word): ?>
+			data.decomposition = 1; // cannot be failure if 1 word only
+			<?php endif ?>
 
 			function rotateExample()
 			{
