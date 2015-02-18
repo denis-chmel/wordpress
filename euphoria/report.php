@@ -1,6 +1,6 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Origin: *');
 
 //ini_set('display_errors', 1);
 //error_reporting(-1);
@@ -25,7 +25,7 @@ foreach ($parts as $part) {
   }
 }
 
-$decomposition = @$_POST['decomposition'] == "1" ? 'y' : 'n';
+$decomposition = @$_POST['decomposition'] == 'y' ? 'y' : 'n';
 $finished_at = 'n' == $decomposition || 0 == $unfinished_count ? 'NOW()' : 'NULL';
 
 $q = $pdo->prepare("REPLACE INTO euphoria_reports (request_id, query, decomposition, parts, wrong_parts, ip, url, raw_response, finished_at) VALUES (:request_id, :query, :decomposition, :parts, :wrong_parts, :ip, :url, :raw_response, $finished_at)");

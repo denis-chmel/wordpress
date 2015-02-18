@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: text/html; charset=utf-8');
+
 $request_id = uniqid();
 $url = 'http://0.0.0.0:5555/api/v0.1/parse';
 
@@ -35,6 +37,8 @@ if ($query) {
 
 		$decomposition = str_replace(',', ' ', $query);
 		$decomposition = str_replace('  ', ' ', $decomposition);
+		$decomposition = strtolower($decomposition);
+
 		$report_parts = $parts = [];
 		$types = [
 			'exact' => 'dish name',
@@ -56,7 +60,7 @@ if ($query) {
 				$type = $types[$type];
 			}
 
-			$html = '<span class="part"><i><em>' . $type . '<span class="question-sign">?</span></em></i>' . $item['query'] . '</span> ';
+			$html = '<span class="part"><i><em>' . $type . '<span class="question-sign">?</span></em></i>' . htmlspecialchars($item['query']) . '</span> ';
 			$decomposition = str_replace($item['query'], $html, $decomposition);
 
 			$report_parts[] = [
@@ -75,7 +79,7 @@ if ($query) {
 
 $examples = [
 	// From Sergey
-	'desert',
+	'dessert',
 	'ham, egg and cheese',
 	'black bean soup',
 	'fish soup',
@@ -107,7 +111,7 @@ shuffle($examples);
 $questions = [
 	'exact' => 'We believe this is a <i>dish name</i>. Correct?',
 	'category' => 'We believe this is a <i>category</i>. Correct?',
-	'keyword' => 'This is neither a dish name, nor category. Correct?',
+	'keyword' => 'This is neither a dish name, nor a category. Correct?',
 ]
 
 ?>
@@ -119,8 +123,8 @@ $questions = [
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<style type="text/css">
 		body{margin: 10px}
-		h4{margin-top:35px}
-		h1{font-size:0}
+		h4{margin-top:25px}
+		h1{font-size:0;margin-bottom:15px}
 		h1:before{content:"Euphoria Query Parser";display:block;padding-left:135px;width:210px;height:35px;line-height:1.2;font-size:12px;color:#AAA;background:url(https://www.gobask.com/release/img/logo-white.png) no-repeat}
 		#request,#response{font:12px monospace;white-space:pre;padding:5px;height:18em;overflow-y:scroll}
 		#response{height:auto;overflow-y:hidden;min-height:18em;background:transparent}
@@ -222,6 +226,7 @@ $questions = [
 
 		.decomposition .part i em {
 			display: inline-block;
+			white-space: nowrap;
 			margin-left: -50%;
 		}
 		.decomposition .part.gray em {
@@ -274,9 +279,9 @@ $questions = [
 
 			<form action="<?php echo $_SERVER['REQUEST_URI'] ?>" class="input-group">
 
-				<input type="text" class="form-control query-input" size="40" name="query" value="<?php echo $query ?>" />
+				<input type="text" class="form-control query-input" size="40" name="query" value="<?php echo htmlspecialchars($query) ?>" />
 				<span class="input-group-btn">
-					<button class="btn btn-success" type="submit">Understand</button>
+					<button class="btn btn-success" type="submit">Interpret</button>
 				</span>
 			</form>
 
@@ -285,8 +290,7 @@ $questions = [
 				<!-- ssh -f -L 5555:localhost:5555 -N denis@devdb01.gobask.com -->
 			<?php endif ?>
 
-			<p class="debug">e.g. <a id="example" href="#">desert</a></p>
-			<p class="debug"><?php echo $request_id ?></p>
+			<p class="debug">e.g. <a id="example" href="#">dessert</a></p>
 
 			<div id="decomposition" class="<?php echo $query && !$error ? '' : 'hidden' ?>">
 				<h4>Results</h4>
@@ -294,13 +298,13 @@ $questions = [
 				<?php if ($is_one_word): ?>
 
 					<p style="margin-bottom: 20px">
-						You are definitely asked for one dish only.<br>
+						You have definitely asked for one dish only.<br>
 						<span class="help">(but you may request several at once, just use "and", or comas, or semicolons)</span>
 					</p>
 
 				<?php else: ?>
 					<div class="well">
-						<p>First we are trying to find how many items it contains. Each item is related to a dish. For example it's a mistake to treat "ham and cheese and desert" as 3 dishes.</p>
+						First, we are trying to figure out how many dishes you've asked for.
 					</div>
 
 					<div class="question-block" for="decomposition">
@@ -317,11 +321,12 @@ $questions = [
 			<div id="types" class="<?php echo $is_one_word ? '' : 'hidden' ?>">
 
 				<div class="well">
-					<p>Let us detect whether each part is a</p>
+					<p>Next, we need to figure out what type of query you've made, the
+						options are:</p>
 					<ul style="list-style-type: none; padding-left: 15px">
-						<li>dish name<span class="help">&nbsp;&mdash; e.g. ham and cheese</span></li>
-						<li>category<span class="help">&nbsp;&mdash; e.g. desert, pasta, sandwich</span></li>
-						<li>keyword<span class="help">&nbsp;&mdash; neither, just a world from name or ingredients</span></li>
+						<li>dish name<span class="help">&nbsp;&mdash; This is an actual eat dish name</span></li>
+						<li>category<span class="help">&nbsp;&mdash; This is a category of dishes</span></li>
+						<li>keyword<span class="help">&nbsp;&mdash; Neither exact dish nor category, you are just looking for a dish similar to this.</span></li>
 					</ul>
 				</div>
 
@@ -425,7 +430,6 @@ $questions = [
 			function rotateExample()
 			{
 				var example_query = examples[example_index++];
-				console.log(example_query);
 				if (!example_query) {
 					example_index = 0;
 					example_query = examples[example_index++];
@@ -444,12 +448,12 @@ $questions = [
 
 				var $container = $(this).closest('p');
 				$container.find('.yes-no').removeClass("btn-default1 btn-success btn-danger active");
-				var is_yes = $(this).text() == 'Yes' ? 1 : 0;
+				var is_yes = $(this).text() == 'Yes';
 				$(this).addClass('active').addClass(is_yes ? "btn-success" : "btn-danger");
 				var block = $(this).closest(".question-block");
 				block.toggleClass('correct', is_yes).toggleClass('wrong', !is_yes);
 				if (block.attr('for') == 'decomposition') {
-					data.decomposition = is_yes;
+					data.decomposition = is_yes ? 'y' : 'n';
 					$("#types").toggleClass('hidden', !is_yes);
 					$("#types .question-block:first").toggleClass('hidden', !is_yes);
 					$("#thank-you").toggleClass('hidden', is_yes);
@@ -473,9 +477,10 @@ $questions = [
 					data
 				).done(function(response){
 						if (response) alert('Warning: ' + response);
-					}).fail(function(response){
-						console.log(response);
-						alert('Error: ' + (response.responseText || 'unknown error'));
+					}).error(function(response){
+						if ($(".debug:visible").length == 0) {
+							alert('Error: ' + (response.responseText || 'unknown error'));
+						}
 					});
 
 				$('body').stop().animate({scrollTop: 1000}, 1000);
