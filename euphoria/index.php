@@ -126,7 +126,7 @@ $questions = [
 	<style type="text/css">
 		body{margin: 10px}
 		h4{margin-top:25px}
-		h1{font-size:0;margin-bottom:15px}
+		h1{font-size:0;margin-bottom:5px}
 		h1:before{content:"Euphoria Query Parser";display:block;padding-left:135px;width:210px;height:35px;line-height:1.2;font-size:12px;color:#AAA;background:url(https://www.gobask.com/release/img/logo-white.png) no-repeat}
 		#request,#response{font:12px monospace;white-space:pre;padding:5px;height:18em;overflow-y:scroll}
 		#response{height:auto;overflow-y:hidden;min-height:18em;background:transparent}
@@ -301,7 +301,7 @@ $questions = [
 
 					<p style="margin-bottom: 20px">
 						You have definitely asked for one dish only.<br>
-						<span class="help">(but you may request several at once, just use "and", or comas, or semicolons)</span>
+						<span class="help">(but you may request several at once, just use "and", commas, or semicolons)</span>
 					</p>
 
 				<?php else: ?>
@@ -326,7 +326,7 @@ $questions = [
 					<p>Next, we need to figure out what type of query you've made, the
 						options are:</p>
 					<ul style="list-style-type: none; padding-left: 15px">
-						<li>dish name<span class="help">&nbsp;&mdash; This is an actual eat dish name</span></li>
+						<li>dish name<span class="help">&nbsp;&mdash; This is an actual dish name</span></li>
 						<li>category<span class="help">&nbsp;&mdash; This is a category of dishes</span></li>
 						<li>keyword<span class="help">&nbsp;&mdash; Neither exact dish nor category, you are just looking for a dish similar to this.</span></li>
 					</ul>
@@ -346,7 +346,7 @@ $questions = [
 
 			<div class="question-block hidden" id="thank-you">
 				<h4>Thank you!</h4>
-				<p>We would appreciate you to try again.</p>
+				<p>Please try another query.</p>
 				<button class="btn btn-default try-again">Try another query</button>
 			</div>
 
