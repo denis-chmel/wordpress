@@ -1,5 +1,6 @@
 <?php
 
+require("config.php");
 // header('Access-Control-Allow-Origin: *');
 
 //ini_set('display_errors', 1);
@@ -8,7 +9,7 @@ if (empty($_POST['request_id'])) {
 	die("Error: non-empty request_id is expected to be in POST");
 }
 
-$pdo = new PDO('mysql:host=127.0.0.1;dbname=bask_blog', 'bask_blog', 'Ahmichai4');
+$pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
 $pdo->exec("SET CHARACTER SET utf8");
 
 $parts = @$_POST['parts'] ?: [];

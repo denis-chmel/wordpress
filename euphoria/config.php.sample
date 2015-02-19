@@ -1,0 +1,6 @@
+<?php
+
+define('DB_HOST', 'db01.gobask.com');
+define('DB_NAME', 'euphoria');
+define('DB_USER', 'yallos');
+define('DB_PASS', '');
