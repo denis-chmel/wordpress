@@ -87,7 +87,7 @@ $examples = [
 	'bagel and cream cheese',
 	'cheeseburger with bacon and onions',
 	'turkey and salami sandwich on 7 grain bread, with pepperjack cheese, lettuce, tomato, mayo and mustard',
-	'ham and chee\se',
+	'ham and cheese',
 	'pepperoni pizze',
 	'pizza with sausage, pepper and onions',
 	'Roast Beef sandwich and coke',
@@ -426,7 +426,7 @@ $questions = [
 			data.url = window.location.href;
 			data.raw_response = <?php echo json_encode($raw_response) ?>;
 			<?php if ($is_one_word): ?>
-			data.decomposition = 1; // cannot be failure if 1 word only
+			data.decomposition = 'y'; // cannot be failure if 1 word only
 			<?php endif ?>
 
 			function rotateExample()
