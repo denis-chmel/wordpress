@@ -1,0 +1,538 @@
+<html>
+<head>
+	<title>BaskPredict Demo</title>
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<style type="text/css">
+		body{margin: 10px}
+		h4{margin-top:25px}
+		h1{font-size:0}
+		h1:before{content:"BaskPredict Demo";display:block;padding-left:135px;width:200px;height:35px;line-height:1.2;font-size:12px;color:#AAA;background:url(https://www.gobask.com/release/img/logo-white.png) no-repeat}
+		#request,#response{font:12px monospace;white-space:pre;padding:5px;height:18em;overflow-y:scroll}
+		#response{height:auto;overflow-y:hidden;min-height:18em;background:transparent}
+		#request{width:100%;border:1px solid silver;border-radius:4px;resize:vertical}
+		#dishes{overflow:hidden;overflow-y:auto;min-height:400px;border-radius:6px;margin-top: 15px;}
+		#dish_template,#li_template,#persona_template{display:none}
+		.dish{margin-bottom:15px;padding:10px;border:2px solid #DDD;border-radius:6px}
+		.dish .restaurant{padding:5px 0;border-left:1px dotted silver;text-align:center}
+		.dish *{line-height:1.3}
+		.dish .description{min-height:50px}
+		.dish h5{font-size:16px;margin-top:0}
+		.dish a{text-decoration:underline;font-size:13px}
+		.dish .restaurant-image{height:60px;width:60px;border-radius:50%;padding:6px;margin:0 10px 5px 0;background:#FFF}
+		.dish .btn-light{background:#EEE}
+		body:after{-webkit-transition:all 500ms;-moz-transition:all 500ms;-o-transition:all 500ms;transition:all 500ms;content:"The request was updated, see new recommendations.";color:#FFF;padding-top:20px;text-align:center;display:block;position:fixed;height:65px;left:0;right:0;top:-100%;font-size:18px;background:#5cb85c;z-index:100;opacity:.8}
+		body.success:after{top:0;opacity:1}
+		.help{color:#AAA;font-size:15px}
+		.error{color:red}
+		label{font-weight:400}
+		.nowrap{white-space:nowrap}
+		.dish button{margin-top:5px}
+		.dish .restaurant-name{font-size:12px}
+		.dish .restaurant,.dish .restaurant a{color:#999}
+		.dish .price{padding-left:5px;color:#6f9235}
+		.dish .dish-id{float: right; color: #CCC; font-size: 11px}
+		.technical {padding: 0 30px 15px; margin: 40px auto;}
+		.personas .glyphicon {font-size: 18px; display: block; padding: 5px;}
+		#user-input a {color: #CCC;text-decoration: none;padding: 9px;margin: -7px -10px 0 0}
+		#user-input .section {padding: 3px; border-radius: 2px}
+		#user-input .ordered .section {color: #fff;background: #337ab7}
+		.list-group-item{padding:5px 10px}
+		@media (max-width: 767px) {
+			.technical {max-height: 385px;overflow: hidden; overflow-y:auto; }
+		}
+	</style>
+</head>
+<body>
+
+<div class="container">
+
+	<h1>Bask</h1>
+
+	<div class="row">
+		<div class="col-sm-6 left">
+
+			<h4>Personas</h4>
+
+			<p class="help">Switch between test users with real history to check their recommendations.</p>
+
+			<div class="btn-group personas">
+				<button type="button" class="btn btn-default active" id="cold-start">
+					<span class="glyphicon glyphicon-remove"></span>
+					Cold Start
+				</button>
+			</div>
+
+			<form class="input-group hidden">
+
+				<input type="text" class="form-control address-input" size="40" name="address" value="235 E. 49th St NY, NY 10017" />
+				<span class="input-group-btn">
+					<button class="btn btn-success" type="submit">Discover</button>
+				</span>
+			</form>
+
+			<h4>Cuisine</h4>
+			<form class="input-group" style="width: 100%">
+				<select class="form-control cuisine-select">
+					<option></option>
+					<option>Afghan</option>
+					<option>African</option>
+					<option>Albanian</option>
+					<option>American</option>
+					<option>Argentinian</option>
+					<option>Asian</option>
+					<option>Australian</option>
+					<option>Austrian</option>
+					<option>BBQ</option>
+					<option>Belgian</option>
+					<option>Brazilian</option>
+					<option>British</option>
+					<option>Burmese</option>
+					<option>Cajun</option>
+					<option>Californian</option>
+					<option>Cambodian</option>
+					<option>Cantonese</option>
+					<option>Caribbean</option>
+					<option>Chinese</option>
+					<option>Colombian</option>
+					<option>Costa Rican</option>
+					<option>Cuban</option>
+					<option>Dim Sum</option>
+					<option>Dominican</option>
+					<option>Ecuadorian</option>
+					<option>Egyptian</option>
+					<option>El Salvadoran</option>
+					<option>English</option>
+					<option>Ethiopian</option>
+					<option>Filipino</option>
+					<option>French</option>
+					<option>German</option>
+					<option>Greek</option>
+					<option>Guatemalan</option>
+					<option>Haitian</option>
+					<option>Halal</option>
+					<option>Hawaiian</option>
+					<option>Indian</option>
+					<option>Indonesian</option>
+					<option>Irish</option>
+					<option>Italian</option>
+					<option>Jamaican</option>
+					<option>Japanese</option>
+					<option>Korean</option>
+					<option>Kosher-Style</option>
+					<option>Latin American</option>
+					<option>Lebanese</option>
+					<option>Malaysian</option>
+					<option>Mandarin</option>
+					<option>Mediterranean</option>
+					<option>Mexican</option>
+					<option>Middle Eastern</option>
+					<option>Mongolian</option>
+					<option>Moroccan</option>
+					<option>Nepalese</option>
+					<option>Pakistani</option>
+					<option>Persian</option>
+					<option>Peruvian</option>
+					<option>Polish</option>
+					<option>Portuguese</option>
+					<option>Puerto Rican</option>
+					<option>Russian</option>
+					<option>Scandinavian</option>
+					<option>Seafood</option>
+					<option>Senegalese</option>
+					<option>Soul Food</option>
+					<option>South African</option>
+					<option>South American</option>
+					<option>Southern</option>
+					<option>Southwestern</option>
+					<option>Spanish</option>
+					<option>Taiwanese</option>
+					<option>Tapas</option>
+					<option>Tex-Mex</option>
+					<option>Thai</option>
+					<option>Tibetan</option>
+					<option>Turkish</option>
+					<option>Ukrainian</option>
+					<option>Venezuelan</option>
+					<option>Vietnamese</option>
+				</select>
+			</form>
+
+			<h4>Keyword Search</h4>
+			<form class="input-group">
+				<input type="text" class="form-control keyword-input" size="40" name="search" value="" placeholder="Keywords" />
+				<span class="input-group-btn">
+					<button class="btn btn-success" type="submit">Search</button>
+				</span>
+			</form>
+
+			<p class="hidden"><label><input id="healthy" type="checkbox" /> Get only healthy dishes</label></p>
+
+			<h4>Recommendations</h4>
+
+			<div id="dishes"></div>
+
+		</div>
+		<div class="col-sm-6">
+
+			<div class="technical well">
+
+				<div id="user-input">
+					<h4>User Input</h4>
+
+					<p class="help empty">No liked, disliked, favorited or ordered items yet.</p>
+					<ul class="list-group"></ul>
+				</div>
+
+				<h4>API Endpoint</h4>
+
+				<p>
+					<input type="text" class="form-control" id="endpoint" value="http://devdb01.gobask.com:8080/v1/recommendations"/>
+				</p>
+
+				<h4>Request <span class="help pull-right">(editable, Ctrl+Enter to re-send)</span></h4>
+
+			<textarea id="request">
+{
+    "min_price": 5.99,
+    "tags": "",
+    "user": {
+        "keywords": "",
+        "ordered": [
+            "3065-N22",
+            "3065-N24",
+            "3065-N41",
+            "73496-N39",
+            "73496-N86",
+            "75261-N54",
+            "75261-N35",
+            "75261-N22",
+            "75261-N196",
+            "75261-N27",
+            "75261-N34",
+            "75261-N38"
+        ]
+    },
+    "merchants": [
+	"954","1052","2714","3426","6117","32219","40976","51830","58271","59576","59579","60741","61048","61058","61217","61287","61365","61418","61960","61977","62224","62464","63060","63190","63265","63497","63498","63926","64432","64752","65887","66644","66670","66742","66880","67409","67812","68630","68868","68912","69115","69139","69208","69250","69371","69382","69421","70386","71053","71494","71748","72195","72196","72471","72869","73217","73566","73568","73893","74680","74725","75150","75334","76031","76790","78718","79196","79262","79353","79938","80021","80090","80160","76803","81542","81738","82228","80403","63716","81796"
+    ],
+    "client_id": "4614cd195f129e05c207b35bd004b476"
+}
+</textarea>
+				<h4>Response</h4>
+				<pre id="response"></pre>
+			</div>
+
+		</div>
+	</div>
+
+	<li id="li_template" class="list-group-item">
+		<a href="#" class="glyphicon glyphicon-remove pull-right"></a>
+		<span class="section glyphicon"></span>
+		<span class="dish-name"></span>
+	</li>
+
+	<button id="persona_template" type="button" class="btn btn-default">
+		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+		<span class="name"></span>
+	</button>
+
+	<div id="dish_template" class="dish card">
+		<div class="row">
+			<div class="col-xs-8">
+				<h5>
+					<span class="dish-name">Test name</span>
+					<span class="price">$1</span>
+					<span class="dish-id"></span>
+				</h5>
+				<p class="description">Test descriptions</p>
+				<button class="btn btn-primary" update-section="ordered">
+					<span class="glyphicon glyphicon-shopping-cart"></span>
+					Order
+				</button>
+				<button class="btn btn-light" update-section="favorited" title="Add to favorites">
+					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+				</button>
+				<span class="nowrap">
+					<button class="btn btn-light" update-section="liked" title="Like">
+						<span class="glyphicon glyphicon-thumbs-up"></span>
+					</button>
+					<button class="btn btn-light" update-section="disliked" title="Dislike">
+						<span class="glyphicon glyphicon-thumbs-down"></span>
+					</button>
+				</span>
+			</div>
+			<div class="col-xs-4 restaurant">
+				<p class="restaurant-name"></p>
+				<img class="restaurant-image" src="" title="" /><br>
+				<div class="enter-restaurant hidden">
+					<a href="#">See full menu</a>
+				</div>
+				<div class="leave-restaurant hidden">
+					<a href="#">Leave restaurant</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+	var personas = [];
+
+	function getCurrentJson() {
+		return JSON.parse($('#request').val());
+	}
+
+	function addBackgroundEntry(section, dish_id, dish_name) {
+		var $li = $('#li_template').clone();
+		$li.removeAttr('id');
+		$li.attr('dish-id', dish_id);
+		$li.attr('section', section);
+		$li.addClass(section);
+		var icons = {
+			favorited: 'glyphicon-heart',
+			disliked: 'glyphicon-thumbs-down',
+			liked: 'glyphicon-thumbs-up',
+			ordered: 'glyphicon-shopping-cart'
+		};
+		$li.find('.section').addClass(icons[section]);
+		$li.find('.dish-name').html(dish_name);
+		$("#user-input ul").append($li);
+		$("#user-input .empty").hide();
+	}
+
+	$("form").submit(function(e) {
+		e.preventDefault();
+		window.scrollTo(0, 0);
+		try {
+			var request = JSON.parse($("#request").val());
+		} catch(e) {
+			alert('Request JSON ' + e);
+			return;
+		}
+		$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
+
+		$.ajax({
+			url: $("#endpoint").val(),
+			type: "POST",
+			data: JSON.stringify(request),
+			contentType: "application/json",
+			dataType: "json",
+			success: function (data) {
+				var response;
+				$("#dishes").empty();
+				if (typeof data === 'object') {
+					response = JSON.stringify(data, undefined, 4);
+				} else {
+					// No error code, but response is not JSON. Show as it is.
+					response = $('<div/>').text(data);
+					$("#dishes").html(data);
+				}
+				$("#response").html(response);
+				if (data.error) {
+					$("#dishes").html("Got an error: " + data.error);
+					return;
+				}
+				if (!data.dishes.length) {
+					$("#dishes").html('<span class="help">Nothing can be recommended for such input.</span>');
+				}
+				$(data.dishes).each(function (i, dish) {
+					var $dish = $("#dish_template").clone();
+					$dish.attr('id', dish.id);
+					$dish.attr('restaurant-id', dish.restaurant.id);
+					$dish.find('.dish-id').text(dish.id);
+					$dish.find('.dish-name').html(dish.name);
+					$dish.find('.price').html('$' + dish.price);
+					$dish.find('.description').html(dish.description);
+					$dish.find('.restaurant-name').html(dish.restaurant.name);
+					$dish.find('.restaurant-image').attr('src', dish.restaurant.image).attr('title', dish.restaurant.name);
+					$('#dishes').append($dish);
+				});
+			},
+			fail: function (response) {
+				var message = response.responseJSON ? response.responseJSON.error : null;
+				if (typeof message !== 'string') {
+					message = response.responseText; // show exact request body
+				}
+				$('#dishes').html('<span class=error>' + message + '</span>');
+				$('#response').html(response.responseText);
+			}
+		});
+
+		return false;
+	}).submit();
+
+	$(document).on("keydown", function (e) {
+		if (e.keyCode === 13 && e.ctrlKey) {
+			e.preventDefault();
+			$("form").submit();
+		}
+	});
+
+	$('#healthy').on('click', function(){
+		var json = getCurrentJson();
+		json.healthy = this.checked ? 1 : 0;
+		resubmit(json);
+	});
+
+	function resubmit(json) {
+		$('#request').val(JSON.stringify(json, undefined, 4));
+		$('form').submit();
+		$('body').addClass('success');
+		clearTimeout(window.timeout_id);
+		window.timeout_id = setTimeout(function(){
+			$('body').removeClass('success');
+		}, 2000);
+	}
+
+	$(document).on('click', '.dish .btn', function(){
+		var $dish = $(this).closest('.dish');
+		var dish_id = $dish.attr('id');
+		var json = getCurrentJson();
+		var section = $(this).attr('update-section');
+		json.user[section] = json.user[section] || [];
+		json.user[section].push(dish_id);
+		// Remove duplicates, dislike what was liked etc
+		if (section == 'disliked') {
+			// remove disliked ones from liked/favorited
+			$.each(json.user, function(key,  values) {
+				if (key == 'liked' || key == 'favorited') {
+					json.user[key] = values.filter(function(value) {
+						return json.user['disliked'].indexOf(value) == -1;
+					});
+				}
+			});
+		}
+		// Remove duplicates
+		$.each(json.user, function(key,  values) {
+			json.user[key] = $.unique(values);
+		});
+
+		addBackgroundEntry(section, dish_id, $dish.find('.dish-name').text());
+
+		resubmit(json);
+	});
+
+	$('#user-input').on('click', 'li a', function(e) {
+		e.preventDefault();
+		var $li = $(this).closest('li');
+		var section = $li.attr('section');
+		var dish_id = $li.attr('dish-id');
+		var json = getCurrentJson();
+		var index = json.user[section].indexOf(dish_id);
+		if (index > -1) {
+			json.user[section].splice(index, 1);
+		}
+		$li.remove();
+		$('#user-input .empty').toggle($('#user-input li').length == 0);
+		resubmit(json);
+	});
+
+	$('.address-input').on('keyup', function() {
+		var json = getCurrentJson();
+		json.location = $(this).val();
+		$('#request').val(JSON.stringify(json, undefined, 4));
+	});
+
+	$('.keyword-input').on('keyup', function() {
+		var json = getCurrentJson();
+		json.user.keywords = $(this).val();
+		$('#request').val(JSON.stringify(json, undefined, 4));
+	});
+
+	$('.cuisine-select').on('change', function() {
+		var json = getCurrentJson();
+		json.tags = $(this).val();
+                resubmit(json);
+	});
+
+	$(document).on('click', '.dish .enter-restaurant a', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		var restaurant_id = $(this).closest('.dish').attr('restaurant-id');
+		json.restaurants = [restaurant_id];
+		resubmit(json);
+	});
+
+	$(document).on('click', '.dish .leave-restaurant a', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		json.restaurants = [];
+		resubmit(json);
+	});
+
+	$('.personas').on('click', 'button', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		$('.personas button').removeClass('active');
+		var persona = personas[$(this).index()];
+
+		$('#user-input li').remove();
+
+		if (typeof persona === 'undefined') {
+			$('#cold-start').addClass('active');
+			persona = {
+				"user": {
+					"liked": [],
+					"disliked": [],
+					"favorited": [],
+					"ordered": []
+				}
+			};
+		}
+
+		$(this).addClass('active');
+		json.user = {};
+		$.each(persona.user, function(section, items) {
+			json.user[section] = [];
+			$.each(items, function(i, dish) {
+				json.user[section].push(dish.id);
+				addBackgroundEntry(section, dish.id, dish.name);
+			});
+		});
+
+		$('#user-input .empty').toggle($('#user-input li').length == 0);
+
+		resubmit(json);
+	});
+
+$(function(){
+	var json = getCurrentJson();
+	$.ajax({
+		url: 'https://api.gobask.com/v1/recommendations/personas?client_id=' + json.client_id,
+		dataType: 'json'
+	}).done(function(json) {
+		personas = json;
+		var $personas = $('.personas');
+		$personas.find('> *').not('#cold-start').remove();
+		$.each(personas, function(i, persona){
+			var $item = $('#persona_template').clone();
+			$item.removeAttr('id');
+			$item.find('.name').text(persona.name);
+			$personas.append($item);
+		});
+		$personas.append($('#cold-start'));
+	}).fail(function(a,b,c){
+		console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
+	});
+
+});
+
+</script>
+
+<script type="text/javascript">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-48341855-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
+
