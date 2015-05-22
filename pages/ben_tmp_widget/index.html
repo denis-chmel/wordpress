@@ -1,7 +1,8 @@
+
 <html>
 <head>
 	<title>BaskPredict Demo</title>
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<style type="text/css">
 		body{margin: 10px}
@@ -63,100 +64,91 @@
 				</button>
 			</div>
 
-			<form class="input-group hidden">
-
-				<input type="text" class="form-control address-input" size="40" name="address" value="235 E. 49th St NY, NY 10017" />
-				<span class="input-group-btn">
-					<button class="btn btn-success" type="submit">Discover</button>
-				</span>
-			</form>
-
 			<h4>Cuisine</h4>
-			<form class="input-group" style="width: 100%">
+			<div class="input-group" style="width: 100%">
 				<select class="form-control cuisine-select">
 					<option></option>
-					<option>Afghan</option>
-					<option>African</option>
-					<option>Albanian</option>
-					<option>American</option>
-					<option>Argentinian</option>
-					<option>Asian</option>
-					<option>Australian</option>
-					<option>Austrian</option>
-					<option>BBQ</option>
-					<option>Belgian</option>
-					<option>Brazilian</option>
-					<option>British</option>
-					<option>Burmese</option>
-					<option>Cajun</option>
-					<option>Californian</option>
-					<option>Cambodian</option>
-					<option>Cantonese</option>
-					<option>Caribbean</option>
-					<option>Chinese</option>
-					<option>Colombian</option>
-					<option>Costa Rican</option>
-					<option>Cuban</option>
-					<option>Dim Sum</option>
-					<option>Dominican</option>
-					<option>Ecuadorian</option>
-					<option>Egyptian</option>
-					<option>El Salvadoran</option>
-					<option>English</option>
-					<option>Ethiopian</option>
-					<option>Filipino</option>
-					<option>French</option>
-					<option>German</option>
-					<option>Greek</option>
-					<option>Guatemalan</option>
-					<option>Haitian</option>
-					<option>Halal</option>
-					<option>Hawaiian</option>
-					<option>Indian</option>
-					<option>Indonesian</option>
-					<option>Irish</option>
-					<option>Italian</option>
-					<option>Jamaican</option>
-					<option>Japanese</option>
-					<option>Korean</option>
-					<option>Kosher-Style</option>
-					<option>Latin American</option>
-					<option>Lebanese</option>
-					<option>Malaysian</option>
-					<option>Mandarin</option>
-					<option>Mediterranean</option>
-					<option>Mexican</option>
-					<option>Middle Eastern</option>
-					<option>Mongolian</option>
-					<option>Moroccan</option>
-					<option>Nepalese</option>
-					<option>Pakistani</option>
-					<option>Persian</option>
-					<option>Peruvian</option>
-					<option>Polish</option>
-					<option>Portuguese</option>
-					<option>Puerto Rican</option>
-					<option>Russian</option>
-					<option>Scandinavian</option>
-					<option>Seafood</option>
-					<option>Senegalese</option>
-					<option>Soul Food</option>
-					<option>South African</option>
-					<option>South American</option>
-					<option>Southern</option>
-					<option>Southwestern</option>
-					<option>Spanish</option>
-					<option>Taiwanese</option>
-					<option>Tapas</option>
-					<option>Tex-Mex</option>
-					<option>Thai</option>
-					<option>Tibetan</option>
-					<option>Turkish</option>
-					<option>Ukrainian</option>
-					<option>Venezuelan</option>
-					<option>Vietnamese</option>
+					<option>afghan</option>
+					<option>african</option>
+					<option>american</option>
+					<option>argentinian</option>
+					<option>armenian</option>
+					<option>asian</option>
+					<option>australian</option>
+					<option>bagels</option>
+					<option>bakery</option>
+					<option>bbq</option>
+					<option>brazilian</option>
+					<option>breakfast</option>
+					<option>burgers</option>
+					<option>burger week</option>
+					<option>cafe</option>
+					<option>candy</option>
+					<option>caribbean</option>
+					<option>cheesesteaks</option>
+					<option>chinese</option>
+					<option>chocolate</option>
+					<option>crepes</option>
+					<option>cuban</option>
+					<option>deli</option>
+					<option>desserts</option>
+					<option>diner</option>
+					<option>empanadas</option>
+					<option>ethiopian</option>
+					<option>farm to table</option>
+					<option>fast food</option>
+					<option>french</option>
+					<option>frozen yogurt</option>
+					<option>fusion</option>
+					<option>german</option>
+					<option>glatt kosher</option>
+					<option>gluten-free</option>
+					<option>greek</option>
+					<option>halal</option>
+					<option>hawaiian</option>
+					<option>healthy</option>
+					<option>hot dogs</option>
+					<option>ice cream</option>
+					<option>indian</option>
+					<option>irish</option>
+					<option>italian</option>
+					<option>japanese</option>
+					<option>juice bar</option>
+					<option>korean</option>
+					<option>kosher</option>
+					<option>latin</option>
+					<option>mediterranean</option>
+					<option>mexican</option>
+					<option>middle eastern</option>
+					<option>moroccan</option>
+					<option>nepalese</option>
+					<option>organic</option>
+					<option>ou kosher</option>
+					<option>peruvian</option>
+					<option>pizza</option>
+					<option>polish</option>
+					<option>portuguese</option>
+					<option>russian</option>
+					<option>salads</option>
+					<option>sandwiches</option>
+					<option>seafood</option>
+					<option>soda pop</option>
+					<option>soul food</option>
+					<option>soups</option>
+					<option>south american</option>
+					<option>spanish</option>
+					<option>steak</option>
+					<option>sushi</option>
+					<option>tapas</option>
+					<option>tex-mex</option>
+					<option>thai</option>
+					<option>turkish</option>
+					<option>vegan</option>
+					<option>vegetarian</option>
+					<option>vietnamese</option>
+					<option>wings</option>
 				</select>
-			</form>
+			</div>
 
 			<h4>Keyword Search</h4>
 			<form class="input-group">
@@ -195,26 +187,16 @@
 			<textarea id="request">
 {
     "min_price": 5.99,
-    "tags": "",
     "user": {
+        "tags": "",
         "keywords": "",
-        "ordered": [
-            "3065-N22",
-            "3065-N24",
-            "3065-N41",
-            "73496-N39",
-            "73496-N86",
-            "75261-N54",
-            "75261-N35",
-            "75261-N22",
-            "75261-N196",
-            "75261-N27",
-            "75261-N34",
-            "75261-N38"
-        ]
+        "favorited": [],
+        "liked": [],
+        "disliked": [],
+        "ordered": []
     },
     "merchants": [
-	"954","1052","2714","3426","6117","32219","40976","51830","58271","59576","59579","60741","61048","61058","61217","61287","61365","61418","61960","61977","62224","62464","63060","63190","63265","63497","63498","63926","64432","64752","65887","66644","66670","66742","66880","67409","67812","68630","68868","68912","69115","69139","69208","69250","69371","69382","69421","70386","71053","71494","71748","72195","72196","72471","72869","73217","73566","73568","73893","74680","74725","75150","75334","76031","76790","78718","79196","79262","79353","79938","80021","80090","80160","76803","81542","81738","82228","80403","63716","81796"
+        "239","498","932","948","954","1037","1052","2681","2714","3127","3131","3395","3426","3467","4256","8762","8898","61099","46678","46044","29490","29848","29982","57264","35859","63724","38280","38522","40976","43764","50465","51830","57309","57485","57562","58006","58271","58616","58967","59020","59041","59519","59576","59600","60427","60718","60741","61287","60832","60949","61058","61166","61217","61219","61381","61418","61421","61584","61659","61673","61679","61923","61925","61960","61977","62058","62224","62234","62285","63898","62512","62490","62589","62871","62903","63024","63265","63190","63384","63456","63457","63926","61402","64229","62551","64472","64642","64752","65363","65962","952","30779","66480","66353","63498","65887","66620","66644","66641","66622","66655","3123","66670","66735","66648","66742","66880","66145","61788","66893","66854","67102","67440","67368","40294","65351","65352","67780","67811","67812","68069","68129","63459","67912","68203","59579","68278","68247","67515","68468","66292","68425","68473","68493","68537","68630","68836","68867","68737","68912","69004","66377","69056","69115","69139","69233","68837","69257","69250","69268","69262","69275","69363","69382","69421","69307","69371","69208","69390","69606","69846","69845","69941","63497","64432","69617","70386","70782","71019","70828","71284","71053","71358","71400","71494","71525","71748","72128","72196","72195","63267","72471","1579","72504","72707","73164","73236","73229","73217","72869","73418","65885","73568","73566","73808","63060","64280","73982","74089","74557","74616","74680","74772","74725","29588","75150","60665","75294","75985","75392","76031","76036","76399","63934","76486","76471","76790","76803","76822","76834","67409","78924","78981","78983","79126","79210","79260","79307","79196","79353","79365","79374","79411","67514","79635","75334","75322","79893","78718","79934","79938","80091","80160","6117","80310","68909","80447","80461","80501","80595","80588","64621","80617","81325","81375","80090","81468","81542","81662","81751","74732","81834","81821","81973","82028","32219","62464","82171","82228","64727","82462","82467","82267","1340","82519","62500","61048","61365","82502","66487","67024","68868","72638","73893","80021"
     ],
     "client_id": "4614cd195f129e05c207b35bd004b476"
 }
@@ -362,7 +344,7 @@
 		});
 
 		return false;
-	}).submit();
+	});
 
 	$(document).on("keydown", function (e) {
 		if (e.keyCode === 13 && e.ctrlKey) {
@@ -407,6 +389,7 @@
 		}
 		// Remove duplicates
 		$.each(json.user, function(key,  values) {
+			if (!values) return;
 			json.user[key] = $.unique(values);
 		});
 
@@ -444,8 +427,8 @@
 
 	$('.cuisine-select').on('change', function() {
 		var json = getCurrentJson();
-		json.tags = $(this).val();
-                resubmit(json);
+		json.user.tags = $(this).val();
+		resubmit(json);
 	});
 
 	$(document).on('click', '.dish .enter-restaurant a', function(e){
@@ -475,7 +458,24 @@
 			$('#cold-start').addClass('active');
 			persona = {
 				"user": {
-					"liked": [],
+					"liked": [
+						{
+							"id": "3395-N194",
+							"name": "Chicken Tikka Masala"
+						},
+						{
+							"id": "71039-N4482",
+							"name": "Pad Thai"
+						},
+						{
+							"id": "62058-N360",
+							"name": "Margherita Pizza"
+						},
+						{
+							"id": "62093-N1851",
+							"name": "The Classic Burger"
+						}
+					],
 					"disliked": [],
 					"favorited": [],
 					"ordered": []
@@ -484,7 +484,10 @@
 		}
 
 		$(this).addClass('active');
-		json.user = {};
+		json.user = {
+			"tags": $('.cuisine-select').val(),
+			"keywords": $('.keyword-input').val()
+		};
 		$.each(persona.user, function(section, items) {
 			json.user[section] = [];
 			$.each(items, function(i, dish) {
@@ -498,27 +501,29 @@
 		resubmit(json);
 	});
 
-$(function(){
-	var json = getCurrentJson();
-	$.ajax({
-		url: 'https://api.gobask.com/v1/recommendations/personas?client_id=' + json.client_id,
-		dataType: 'json'
-	}).done(function(json) {
-		personas = json;
-		var $personas = $('.personas');
-		$personas.find('> *').not('#cold-start').remove();
-		$.each(personas, function(i, persona){
-			var $item = $('#persona_template').clone();
-			$item.removeAttr('id');
-			$item.find('.name').text(persona.name);
-			$personas.append($item);
-		});
-		$personas.append($('#cold-start'));
-	}).fail(function(a,b,c){
-		console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
-	});
+	$(function(){
 
-});
+		$('#cold-start').click();
+
+		var json = getCurrentJson();
+		$.ajax({
+			url: 'https://api.gobask.com/v1/recommendations/personas?client_id=' + json.client_id,
+			dataType: 'json'
+		}).done(function(json) {
+			personas = json;
+			var $personas = $('.personas');
+			$personas.find('> *').not('#cold-start').remove();
+			$.each(personas, function(i, persona){
+				var $item = $('#persona_template').clone();
+				$item.removeAttr('id');
+				$item.find('.name').text(persona.name);
+				$personas.append($item);
+			});
+			$personas.append($('#cold-start'));
+		}).fail(function(a,b,c){
+			console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
+		});
+	});
 
 </script>
 
