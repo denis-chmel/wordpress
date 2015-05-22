@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>BaskPredict Demo</title>
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<style type="text/css">
 		body{margin: 10px}
@@ -37,10 +37,13 @@
 		#user-input a {color: #CCC;text-decoration: none;padding: 9px;margin: -7px -10px 0 0}
 		#user-input .section {padding: 3px; border-radius: 2px}
 		#user-input .ordered .section {color: #fff;background: #337ab7}
-		.list-group-item{padding:5px 10px}
+		.list-group {max-height: 200px; overflow-y: scroll;}
+		.list-group-item{padding:5px 10px; }
 		@media (max-width: 767px) {
 			.technical {max-height: 385px;overflow: hidden; overflow-y:auto; }
 		}
+		.hint a { text-decoration: underline;}
+		.hint, .hint a {color: #999;}
 	</style>
 </head>
 <body>
@@ -56,22 +59,116 @@
 
 			<p class="help">Switch between test users with real history to check their recommendations.</p>
 
-			<div class="btn-group personas">
-				<button type="button" class="btn btn-default active" id="cold-start">
-					<span class="glyphicon glyphicon-remove"></span>
-					Cold Start
-				</button>
-			</div>
+			<div class="btn-group personas"></div>
 
-                        <form class="input-group hidden">
+			<form>
+				<h4>User Id <span class="hint">(e.g. <a href="#" onclick="$('.user-id-input').val($(this).text()).keyup().submit()">173502</a>)</span></h4>
 
-                                <input type="text" class="form-control address-input" size="40" name="address" value="235 E. 49th St NY, NY 10017" />
-                                <span class="input-group-btn">
-                                        <button class="btn btn-success" type="submit">Discover</button>
-                                </span>
-                        </form>
+				<div class="input-group">
+					<input type="text" class="form-control user-id-input" size="40" name="user_id" value="" placeholder=""/>
+					<span class="input-group-btn">
+						<button class="btn btn-success" type="submit">Search</button>
+					</span>
+				</div>
 
-			<p class="hidden"><label><input id="healthy" type="checkbox" /> Get only healthy dishes</label></p>
+				<h4>Cuisine</h4>
+
+				<div class="input-group" style="width: 100%">
+					<select class="form-control cuisine-select">
+						<option></option>
+						<option>afghan</option>
+						<option>african</option>
+						<option>american</option>
+						<option>argentinian</option>
+						<option>armenian</option>
+						<option>asian</option>
+						<option>australian</option>
+						<option>bagels</option>
+						<option>bakery</option>
+						<option>bbq</option>
+						<option>brazilian</option>
+						<option>breakfast</option>
+						<option>burgers</option>
+						<option>burger week</option>
+						<option>cafe</option>
+						<option>candy</option>
+						<option>caribbean</option>
+						<option>cheesesteaks</option>
+						<option>chinese</option>
+						<option>chocolate</option>
+						<option>crepes</option>
+						<option>cuban</option>
+						<option>deli</option>
+						<option>desserts</option>
+						<option>diner</option>
+						<option>empanadas</option>
+						<option>ethiopian</option>
+						<option>farm to table</option>
+						<option>fast food</option>
+						<option>french</option>
+						<option>frozen yogurt</option>
+						<option>fusion</option>
+						<option>german</option>
+						<option>glatt kosher</option>
+						<option>gluten-free</option>
+						<option>greek</option>
+						<option>halal</option>
+						<option>hawaiian</option>
+						<option>healthy</option>
+						<option>hot dogs</option>
+						<option>ice cream</option>
+						<option>indian</option>
+						<option>irish</option>
+						<option>italian</option>
+						<option>japanese</option>
+						<option>juice bar</option>
+						<option>korean</option>
+						<option>kosher</option>
+						<option>latin</option>
+						<option>mediterranean</option>
+						<option>mexican</option>
+						<option>middle eastern</option>
+						<option>moroccan</option>
+						<option>nepalese</option>
+						<option>organic</option>
+						<option>ou kosher</option>
+						<option>peruvian</option>
+						<option>pizza</option>
+						<option>polish</option>
+						<option>portuguese</option>
+						<option>russian</option>
+						<option>salads</option>
+						<option>sandwiches</option>
+						<option>seafood</option>
+						<option>soda pop</option>
+						<option>soul food</option>
+						<option>soups</option>
+						<option>south american</option>
+						<option>spanish</option>
+						<option>steak</option>
+						<option>sushi</option>
+						<option>tapas</option>
+						<option>tex-mex</option>
+						<option>thai</option>
+						<option>turkish</option>
+						<option>vegan</option>
+						<option>vegetarian</option>
+						<option>vietnamese</option>
+						<option>wings</option>
+					</select>
+				</div>
+
+				<h4>Keyword Search</h4>
+
+				<div class="input-group">
+					<input type="text" class="form-control keyword-input" size="40" name="search" value="" placeholder="Keywords"/>
+					<span class="input-group-btn">
+						<button class="btn btn-success" type="submit">Search</button>
+					</span>
+				</div>
+			</form>
+
+			<p class="hidden"><label><input id="healthy" type="checkbox"/> Get only healthy dishes</label></p>
 
 			<h4>Recommendations</h4>
 
@@ -83,7 +180,8 @@
 			<div class="technical well">
 
 				<div id="user-input">
-					<h4>User Input</h4>
+					<h4>User History</h4>
+					<p class="hint loading hidden">Loading...</p>
 
 					<p class="help empty">No liked, disliked, favorited or ordered items yet.</p>
 					<ul class="list-group"></ul>
@@ -92,23 +190,25 @@
 				<h4>API Endpoint</h4>
 
 				<p>
-					<input type="text" class="form-control" id="endpoint" value="http://qa-api.gobask.com/v1/recommendations"/>
+					<input type="text" class="form-control" id="endpoint" value="http://api.predict.gobask.com/v1/recommendations"/>
 				</p>
 
 				<h4>Request <span class="help pull-right">(editable, Ctrl+Enter to re-send)</span></h4>
 
 			<textarea id="request">
 {
-    "merchants": [
-        954,1052,2714,3426,6117,32219,40976,51830,58271,59576,59579,60741,61048,61058,61217,61287,61365,61418,61960,61977,62224,62464,63060,63190,63265,63497,63498,63926,64432,64752,65887,66644,66670,66742,66880,67409,67812,68630,68868,68912,69115,69139,69208,69250,69371,69382,69421,70386,71053,71494,71748,72195,72196,72471,72869,73217,73566,73568,73893,74680,74725,75150,75334,76031,76790,78718,79196,79262,79353,79938,80021,80090,80160,76803,81542,81738,82228,80403,63716,81796
-    ],
-    "min_price": 5.99,
+    "user_id": "",
     "user": {
+        "tags": "",
+        "keywords": "",
+        "favorited": [],
         "liked": [],
         "disliked": [],
-        "favorited": [],
-       	"ordered": []
+        "ordered": []
     },
+    "merchants": [
+        "239","498","932","948","954","1037","1052","2681","2714","3127","3131","3395","3426","3467","4256","8762","8898","61099","46678","46044","29490","29848","29982","57264","35859","63724","38280","38522","40976","43764","50465","51830","57309","57485","57562","58006","58271","58616","58967","59020","59041","59519","59576","59600","60427","60718","60741","61287","60832","60949","61058","61166","61217","61219","61381","61418","61421","61584","61659","61673","61679","61923","61925","61960","61977","62058","62224","62234","62285","63898","62512","62490","62589","62871","62903","63024","63265","63190","63384","63456","63457","63926","61402","64229","62551","64472","64642","64752","65363","65962","952","30779","66480","66353","63498","65887","66620","66644","66641","66622","66655","3123","66670","66735","66648","66742","66880","66145","61788","66893","66854","67102","67440","67368","40294","65351","65352","67780","67811","67812","68069","68129","63459","67912","68203","59579","68278","68247","67515","68468","66292","68425","68473","68493","68537","68630","68836","68867","68737","68912","69004","66377","69056","69115","69139","69233","68837","69257","69250","69268","69262","69275","69363","69382","69421","69307","69371","69208","69390","69606","69846","69845","69941","63497","64432","69617","70386","70782","71019","70828","71284","71053","71358","71400","71494","71525","71748","72128","72196","72195","63267","72471","1579","72504","72707","73164","73236","73229","73217","72869","73418","65885","73568","73566","73808","63060","64280","73982","74089","74557","74616","74680","74772","74725","29588","75150","60665","75294","75985","75392","76031","76036","76399","63934","76486","76471","76790","76803","76822","76834","67409","78924","78981","78983","79126","79210","79260","79307","79196","79353","79365","79374","79411","67514","79635","75334","75322","79893","78718","79934","79938","80091","80160","6117","80310","68909","80447","80461","80501","80595","80588","64621","80617","81325","81375","80090","81468","81542","81662","81751","74732","81834","81821","81973","82028","32219","62464","82171","82228","64727","82462","82467","82267","1340","82519","62500","61048","61365","82502","66487","67024","68868","72638","73893","80021"
+    ],
     "client_id": "4614cd195f129e05c207b35bd004b476"
 }
 </textarea>
@@ -172,230 +272,282 @@
 
 <script type="text/javascript">
 
-var personas = [];
+	var personas = [];
 
-function getCurrentJson() {
-	return JSON.parse($('#request').val());
-}
-
-function addBackgroundEntry(section, dish_id, dish_name) {
-	var $li = $('#li_template').clone();
-	$li.removeAttr('id');
-	$li.attr('dish-id', dish_id);
-	$li.attr('section', section);
-	$li.addClass(section);
-	var icons = {
-		favorited: 'glyphicon-heart',
-		disliked: 'glyphicon-thumbs-down',
-		liked: 'glyphicon-thumbs-up',
-		ordered: 'glyphicon-shopping-cart'
-	};
-	$li.find('.section').addClass(icons[section]);
-	$li.find('.dish-name').html(dish_name);
-	$("#user-input ul").append($li);
-	$("#user-input .empty").hide();
-}
-
-$("form").submit(function(e) {
-	e.preventDefault();
-	window.scrollTo(0, 0);
-	try {
-		var request = JSON.parse($("#request").val());
-	} catch(e) {
-		alert('Request JSON ' + e);
-		return;
+	function getCurrentJson() {
+		return JSON.parse($('#request').val());
 	}
-	var no_restaurants = $.isEmptyObject(request.restaurants);
-	$('.leave-restaurant').toggle(!no_restaurants);
-	$('.enter-restaurant').toggle(no_restaurants);
-	$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
-	$.post($("#endpoint").val(), request, function(data) {
-		var response;
-		$("#dishes").empty();
-		if (typeof data === 'object') {
-			response = JSON.stringify(data, undefined, 4);
-		} else {
-			// No error code, but response is not JSON. Show as it is.
-			response = $('<div/>').text(data);
-			$("#dishes").html(data);
+
+	function addBackgroundEntry(section, dish_id, dish_name, no_remove_icon) {
+		var $li = $('#li_template').clone();
+		if (no_remove_icon) {
+			$li.find('a').remove();
 		}
-		$("#response").html(response);
-		if (data.error) {
-			$("#dishes").html("Got an error: " + data.error);
+		$li.removeAttr('id');
+		$li.attr('dish-id', dish_id);
+		$li.attr('section', section);
+		$li.addClass(section);
+		var icons = {
+			favorited: 'glyphicon-heart',
+			disliked: 'glyphicon-thumbs-down',
+			liked: 'glyphicon-thumbs-up',
+			ordered: 'glyphicon-shopping-cart'
+		};
+		$li.find('.section').addClass(icons[section]);
+		$li.find('.dish-name').html(dish_name);
+		$("#user-input ul").append($li);
+		$("#user-input .empty").hide();
+	}
+
+	$("form").submit(function(e) {
+		e.preventDefault();
+		window.scrollTo(0, 0);
+		try {
+			var request = JSON.parse($("#request").val());
+		} catch(e) {
+			alert('Request JSON ' + e);
 			return;
 		}
-		if (!data.dishes.length) {
-			$("#dishes").html('<span class="help">Nothing can be recommended for such input.</span>');
-		}
-		$(data.dishes).each(function(i, dish) {
-			var $dish = $("#dish_template").clone();
-			$dish.attr('id', dish.id);
-			$dish.attr('restaurant-id', dish.restaurant.id);
-			$dish.find('.dish-id').text(dish.id);
-			$dish.find('.dish-name').html(dish.name);
-			$dish.find('.price').html('$' + dish.price);
-			$dish.find('.description').html(dish.description);
-			$dish.find('.restaurant-name').html(dish.restaurant.name);
-			$dish.find('.restaurant-image').attr('src', dish.restaurant.image).attr('title', dish.restaurant.name);
-			$('#dishes').append($dish);
-		});
+		$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
 
-	}).fail(function(response) {
-		var message = response.responseJSON ? response.responseJSON.error : null;
-		if(typeof message !== 'string') {
-			message = response.responseText; // show exact request body
-		}
+		var json = getCurrentJson();
+		if (json.user_id) {
+			$('#user-input li').remove();
+			$('#user-input .loading').removeClass('hidden');
+			$.ajax({
+				url: 'http://denis-api.gobask.com/v1/recommendations/user-history/' + json.user_id + '?client_id=' + json.client_id,
+				dataType: 'json'
+			}).done(function(json) {
 
-		$('#dishes').html('<span class=error>' + message + '</span>');
-		$('#response').html(response.responseText);
-	});
-
-	return false;
-}).submit();
-
-$(document).on("keydown", function (e) {
-	if (e.keyCode === 13 && e.ctrlKey) {
-		e.preventDefault();
-		$("form").submit();
-	}
-});
-
-$('#healthy').on('click', function(){
-	var json = getCurrentJson();
-	json.healthy = this.checked ? 1 : 0;
-	resubmit(json);
-});
-
-function resubmit(json) {
-	$('#request').val(JSON.stringify(json, undefined, 4));
-	$('form').submit();
-	$('body').addClass('success');
-	clearTimeout(window.timeout_id);
-	window.timeout_id = setTimeout(function(){
-		$('body').removeClass('success');
-	}, 2000);
-}
-
-$(document).on('click', '.dish .btn', function(){
-	var $dish = $(this).closest('.dish');
-	var dish_id = $dish.attr('id');
-	var json = getCurrentJson();
-	var section = $(this).attr('update-section');
-	json.user[section] = json.user[section] || [];
-	json.user[section].push(dish_id);
-	// Remove duplicates, dislike what was liked etc
-	if (section == 'disliked') {
-		// remove disliked ones from liked/favorited
-		$.each(json.user, function(key,  values) {
-			if (key == 'liked' || key == 'favorited') {
-				json.user[key] = values.filter(function(value) {
-					return json.user['disliked'].indexOf(value) == -1;
+				$.each(json, function(i, dish) {
+					addBackgroundEntry('ordered', dish.id, dish.name, true);
 				});
+
+				$('#user-input .loading').addClass('hidden');
+
+			}).fail(function(a,b,c){
+				console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
+			});
+		}
+
+		$.ajax({
+			url: $("#endpoint").val(),
+			type: "POST",
+			data: JSON.stringify(request),
+			dataType: "json",
+			success: function (data) {
+				var response;
+				$("#dishes").empty();
+				if (typeof data === 'object') {
+					response = JSON.stringify(data, undefined, 4);
+				} else {
+					// No error code, but response is not JSON. Show as it is.
+					response = $('<div/>').text(data);
+					$("#dishes").html(data);
+				}
+				$("#response").html(response);
+				if (data.error) {
+					$("#dishes").html("Got an error: " + data.error);
+					return;
+				}
+				if (!data.dishes.length) {
+					$("#dishes").html('<span class="help">Nothing can be recommended for such input.</span>');
+				}
+				$(data.dishes).each(function (i, dish) {
+					var $dish = $("#dish_template").clone();
+					$dish.attr('id', dish.id);
+					$dish.attr('restaurant-id', dish.restaurant.id);
+					$dish.find('.dish-id').text(dish.id);
+					$dish.find('.dish-name').html(dish.name);
+					$dish.find('.price').html('$' + dish.price);
+					$dish.find('.description').html(dish.description);
+					$dish.find('.restaurant-name').html(dish.restaurant.name);
+					$dish.find('.restaurant-image').attr('src', dish.restaurant.image).attr('title', dish.restaurant.name);
+					$('#dishes').append($dish);
+				});
+			},
+			error: function (response,a,b,c,d) {
+				var message = response.responseJSON ? response.responseJSON.error : null;
+				if (typeof message !== 'string') {
+					message = response.responseText; // show exact request body
+				}
+				if (!message) {
+					if (response.status) {
+						message = 'Server has returned no message, merely ' + response.status + ' http code.';
+					} else {
+						// e.g. when XMLHttpRequest cannot load http://api.predict.gobask.com/v1/recommendations. No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://denis-api.gobask.com' is therefore not allowed access.
+						message = 'Request to endpoint has failed. See console.';
+					}
+				}
+				$('#dishes').html('<span class=error>' + message + '</span>');
+				$('#response').html(response.responseText);
 			}
 		});
-	}
-	// Remove duplicates
-	$.each(json.user, function(key,  values) {
-		json.user[key] = $.unique(values);
+
+		return false;
 	});
 
-	addBackgroundEntry(section, dish_id, $dish.find('.dish-name').text());
+	$(document).on("keydown", function (e) {
+		if (e.keyCode === 13 && e.ctrlKey) {
+			e.preventDefault();
+			$("form").submit();
+		}
+	});
 
-	resubmit(json);
-});
+	$('#healthy').on('click', function(){
+		var json = getCurrentJson();
+		json.healthy = this.checked ? 1 : 0;
+		resubmit(json);
+	});
 
-$('#user-input').on('click', 'li a', function(e) {
-	e.preventDefault();
-	var $li = $(this).closest('li');
-	var section = $li.attr('section');
-	var dish_id = $li.attr('dish-id');
-	var json = getCurrentJson();
-	var index = json.user[section].indexOf(dish_id);
-	if (index > -1) {
-		json.user[section].splice(index, 1);
+	function resubmit(json) {
+		$('#request').val(JSON.stringify(json, undefined, 4));
+		$('form').submit();
+		$('body').addClass('success');
+		clearTimeout(window.timeout_id);
+		window.timeout_id = setTimeout(function(){
+			$('body').removeClass('success');
+		}, 2000);
 	}
-	$li.remove();
-	$('#user-input .empty').toggle($('#user-input li').length == 0);
-	resubmit(json);
-});
 
-$('.address-input').on('keyup', function() {
-	var json = getCurrentJson();
-	json.location = $(this).val();
-	$('#request').val(JSON.stringify(json, undefined, 4));
-});
+	$(document).on('click', '.dish .btn', function(){
+		var $dish = $(this).closest('.dish');
+		var dish_id = $dish.attr('id');
+		var json = getCurrentJson();
+		var section = $(this).attr('update-section');
+		json.user[section] = json.user[section] || [];
+		json.user[section].push(dish_id);
+		// Remove duplicates, dislike what was liked etc
+		if (section == 'disliked') {
+			// remove disliked ones from liked/favorited
+			$.each(json.user, function(key,  values) {
+				if (key == 'liked' || key == 'favorited') {
+					json.user[key] = values.filter(function(value) {
+						return json.user['disliked'].indexOf(value) == -1;
+					});
+				}
+			});
+		}
+		// Remove duplicates
+		$.each(json.user, function(key,  values) {
+			if (!values) return;
+			json.user[key] = $.unique(values);
+		});
 
-$(document).on('click', '.dish .enter-restaurant a', function(e){
-	e.preventDefault();
-	var json = getCurrentJson();
-	var restaurant_id = $(this).closest('.dish').attr('restaurant-id');
-	json.restaurants = [restaurant_id];
-	resubmit(json);
-});
+		addBackgroundEntry(section, dish_id, $dish.find('.dish-name').text());
 
-$(document).on('click', '.dish .leave-restaurant a', function(e){
-	e.preventDefault();
-	var json = getCurrentJson();
-	json.restaurants = [];
-	resubmit(json);
-});
+		resubmit(json);
+	});
 
-$('.personas').on('click', 'button', function(e){
-	e.preventDefault();
-	var json = getCurrentJson();
-	$('.personas button').removeClass('active');
-	var persona = personas[$(this).index()];
+	$('#user-input').on('click', 'li a', function(e) {
+		e.preventDefault();
+		var $li = $(this).closest('li');
+		var section = $li.attr('section');
+		var dish_id = $li.attr('dish-id');
+		var json = getCurrentJson();
+		var index = json.user[section].indexOf(dish_id);
+		if (index > -1) {
+			json.user[section].splice(index, 1);
+		}
+		$li.remove();
+		$('#user-input .empty').toggle($('#user-input li').length == 0);
+		resubmit(json);
+	});
 
-	$('#user-input li').remove();
+	$('.address-input').on('keyup', function() {
+		var json = getCurrentJson();
+		json.location = $(this).val();
+		$('#request').val(JSON.stringify(json, undefined, 4));
+	});
 
-	if (typeof persona === 'undefined') {
-		$('#cold-start').addClass('active');
-		persona = {
-			"user": {
-				"liked": [],
-				"disliked": [],
-				"favorited": [],
-				"ordered": []
-			}
+	$('.keyword-input').on('keyup', function() {
+		var json = getCurrentJson();
+		json.user.keywords = $(this).val();
+		$('#request').val(JSON.stringify(json, undefined, 4));
+	});
+
+	$('.user-id-input').on('keyup', function() {
+		var json = getCurrentJson();
+		json.user_id = $(this).val();
+		if (json.user_id) {
+			json.user.liked = [];
+			json.user.ordered = [];
+		}
+		$('#request').val(JSON.stringify(json, undefined, 4));
+	});
+
+	$('.cuisine-select').on('change', function() {
+		var json = getCurrentJson();
+		json.user.tags = $(this).val();
+		resubmit(json);
+	});
+
+	$(document).on('click', '.dish .enter-restaurant a', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		var restaurant_id = $(this).closest('.dish').attr('restaurant-id');
+		json.restaurants = [restaurant_id];
+		resubmit(json);
+	});
+
+	$(document).on('click', '.dish .leave-restaurant a', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		json.restaurants = [];
+		resubmit(json);
+	});
+
+	$('.personas').on('click', 'button', function(e){
+		e.preventDefault();
+		var json = getCurrentJson();
+		$('.personas button').removeClass('active');
+		var persona = personas[$(this).index()];
+
+		$('#user-input li').remove();
+
+		$(this).addClass('active');
+		$('.user-id-input').val('');
+		json.user_id = "";
+		json.user = {
+			"tags": $('.cuisine-select').val(),
+			"keywords": $('.keyword-input').val()
 		};
-	}
-
-	$(this).addClass('active');
-	json.user = {};
-	$.each(persona.user, function(section, items) {
-		json.user[section] = [];
-		$.each(items, function(i, dish) {
-			json.user[section].push(dish.id);
-			addBackgroundEntry(section, dish.id, dish.name);
+		$.each(persona.user, function(section, items) {
+			json.user[section] = [];
+			$.each(items, function(i, dish) {
+				json.user[section].push(dish.id);
+				addBackgroundEntry(section, dish.id, dish.name);
+			});
 		});
+
+		$('#user-input .empty').toggle($('#user-input li').length == 0);
+
+		resubmit(json);
 	});
 
-	$('#user-input .empty').toggle($('#user-input li').length == 0);
+	$(function(){
 
-	resubmit(json);
-});
+		var json = getCurrentJson();
+		$.ajax({
+			url: 'http://denis-api.gobask.com/v1/recommendations/dcom-personas?client_id=' + json.client_id,
+			dataType: 'json'
+		}).done(function(json) {
+			personas = json;
+			var $personas = $('.personas');
+			$personas.find('> *').remove();
+			$.each(personas, function(i, persona){
+				var $item = $('#persona_template').clone();
+				$item.removeAttr('id');
+				$item.find('.name').text(persona.name);
+				$personas.append($item);
+			});
 
-$(function(){
-	var json = getCurrentJson();
-	$.ajax({
-		url: $("#endpoint").val() + '/personas?client_id=' + json.client_id,
-		dataType: 'json'
-	}).done(function(json) {
-		personas = json;
-		var $personas = $('.personas');
-		$personas.find('> *').not('#cold-start').remove();
-		$.each(personas, function(i, persona){
-			var $item = $('#persona_template').clone();
-			$item.removeAttr('id');
-			$item.find('.name').text(persona.name);
-			$personas.append($item);
+			$('.personas button:last').click();
+
+		}).fail(function(a,b,c){
+			console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
 		});
-		$personas.append($('#cold-start'));
-	}).fail(function(a,b,c){
-		console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
 	});
-
-});
 
 </script>
 

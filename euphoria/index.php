@@ -19,7 +19,6 @@ if ($query) {
 	$data = array('query' => $query);
 	$is_one_word = preg_match('#\W#', $query) == 0;
 
-	// use key 'http' even if you send the request to https://...
 	$options = array(
 		'http' => array(
 			'header'  => "Content-type: application/json",
