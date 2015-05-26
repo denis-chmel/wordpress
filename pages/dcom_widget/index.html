@@ -37,7 +37,7 @@
 		#user-input a {color: #CCC;text-decoration: none;padding: 9px;margin: -7px -10px 0 0}
 		#user-input .section {padding: 3px; border-radius: 2px}
 		#user-input .ordered .section {color: #fff;background: #337ab7}
-		.list-group {max-height: 200px; overflow-y: scroll;}
+		.list-group {max-height: 200px; overflow-y: auto;}
 		.list-group-item{padding:5px 10px; }
 		@media (max-width: 767px) {
 			.technical {max-height: 385px;overflow: hidden; overflow-y:auto; }
@@ -180,10 +180,10 @@
 			<div class="technical well">
 
 				<div id="user-input">
-					<h4>User History</h4>
+					<h4>User History <span class="counter"></span></h4>
 					<p class="hint loading hidden">Loading...</p>
 
-					<p class="help empty">No liked, disliked, favorited or ordered items yet.</p>
+					<p class="help empty">No liked or ordered items yet.</p>
 					<ul class="list-group"></ul>
 				</div>
 
@@ -197,13 +197,11 @@
 
 			<textarea id="request">
 {
-    "user_id": "",
+    "user_id": "0",
     "user": {
         "tags": "",
         "keywords": "",
-        "favorited": [],
         "liked": [],
-        "disliked": [],
         "ordered": []
     },
     "merchants": [
@@ -243,15 +241,9 @@
 					<span class="glyphicon glyphicon-shopping-cart"></span>
 					Order
 				</button>
-				<button class="btn btn-light" update-section="favorited" title="Add to favorites">
-					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-				</button>
 				<span class="nowrap">
 					<button class="btn btn-light" update-section="liked" title="Like">
 						<span class="glyphicon glyphicon-thumbs-up"></span>
-					</button>
-					<button class="btn btn-light" update-section="disliked" title="Dislike">
-						<span class="glyphicon glyphicon-thumbs-down"></span>
 					</button>
 				</span>
 			</div>
@@ -297,6 +289,13 @@
 		$li.find('.dish-name').html(dish_name);
 		$("#user-input ul").append($li);
 		$("#user-input .empty").hide();
+		var count = $("#user-input .counter").data('count') + 1;
+		$("#user-input .counter").data('count', count).html('(' + Math.min(300, count) + (count > 300 ? '+' : '') + ')');
+	}
+
+	function cleanUserHistory() {
+		$('#user-input li').remove();
+		$('#user-input .counter').data('count', 0).html('');
 	}
 
 	$("form").submit(function(e) {
@@ -311,9 +310,11 @@
 		$("#response, #dishes").html('<img src="https://www.gobask.com/release/img/ajax-loader.gif">');
 
 		var json = getCurrentJson();
-		if (json.user_id) {
-			$('#user-input li').remove();
+		if (json.user_id && json.user_id != '0') {
+			$('.personas .active').removeClass('active');
+			cleanUserHistory();
 			$('#user-input .loading').removeClass('hidden');
+			$('#user-input .empty').addClass('hidden');
 			$.ajax({
 				url: 'http://denis-api.gobask.com/v1/recommendations/user-history/' + json.user_id + '?client_id=' + json.client_id,
 				dataType: 'json'
@@ -324,6 +325,7 @@
 				});
 
 				$('#user-input .loading').addClass('hidden');
+				$('#user-input .empty').toggleClass('hidden', json.length == 0);
 
 			}).fail(function(a,b,c){
 				console.error('Error while parsing personas JSON: ' + c.message, a.responseText);
@@ -362,7 +364,7 @@
 					$dish.find('.price').html('$' + dish.price);
 					$dish.find('.description').html(dish.description);
 					$dish.find('.restaurant-name').html(dish.restaurant.name);
-					$dish.find('.restaurant-image').attr('src', dish.restaurant.image).attr('title', dish.restaurant.name);
+					$dish.find('.restaurant-image').attr('src', dish.restaurant.image_url).attr('title', dish.restaurant.name);
 					$('#dishes').append($dish);
 				});
 			},
@@ -392,12 +394,6 @@
 			e.preventDefault();
 			$("form").submit();
 		}
-	});
-
-	$('#healthy').on('click', function(){
-		var json = getCurrentJson();
-		json.healthy = this.checked ? 1 : 0;
-		resubmit(json);
 	});
 
 	function resubmit(json) {
@@ -468,7 +464,8 @@
 
 	$('.user-id-input').on('keyup', function() {
 		var json = getCurrentJson();
-		json.user_id = $(this).val();
+		json.user_id = $(this).val() || 0;
+
 		if (json.user_id) {
 			json.user.liked = [];
 			json.user.ordered = [];
@@ -503,11 +500,11 @@
 		$('.personas button').removeClass('active');
 		var persona = personas[$(this).index()];
 
-		$('#user-input li').remove();
+		cleanUserHistory();
 
 		$(this).addClass('active');
 		$('.user-id-input').val('');
-		json.user_id = "";
+		json.user_id = '0';
 		json.user = {
 			"tags": $('.cuisine-select').val(),
 			"keywords": $('.keyword-input').val()
