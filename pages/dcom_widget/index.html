@@ -289,13 +289,24 @@
 		$li.find('.dish-name').html(dish_name);
 		$("#user-input ul").append($li);
 		$("#user-input .empty").hide();
-		var count = $("#user-input .counter").data('count') + 1;
-		$("#user-input .counter").data('count', count).html('(' + Math.min(300, count) + (count > 300 ? '+' : '') + ')');
+		increaseCounter(1);
+	}
+
+	function updateCounter(value) {
+		var $counter = $('#user-input .counter');
+		$counter.data('count', value).html('');
+		if (value) {
+			$counter.html('(' + Math.min(300, value) + (value > 300 ? '+' : '') + ')')
+		}
+	}
+
+	function increaseCounter(value) {
+		updateCounter($("#user-input .counter").data('count') + value);
 	}
 
 	function cleanUserHistory() {
 		$('#user-input li').remove();
-		$('#user-input .counter').data('count', 0).html('');
+		updateCounter(0);
 	}
 
 	$("form").submit(function(e) {
@@ -447,6 +458,7 @@
 		}
 		$li.remove();
 		$('#user-input .empty').toggle($('#user-input li').length == 0);
+		increaseCounter(-1);
 		resubmit(json);
 	});
 
