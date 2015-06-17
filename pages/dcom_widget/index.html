@@ -327,7 +327,7 @@
 			$('#user-input .loading').removeClass('hidden');
 			$('#user-input .empty').addClass('hidden');
 			$.ajax({
-				url: 'http://denis-api.gobask.com/v1/recommendations/user-history/' + json.user_id + '?client_id=' + json.client_id,
+				url: 'https://api.gobask.com/v1/recommendations/user-history/' + json.user_id + '?client_id=' + json.client_id,
 				dataType: 'json'
 			}).done(function(json) {
 
@@ -538,7 +538,7 @@
 
 		var json = getCurrentJson();
 		$.ajax({
-			url: 'http://denis-api.gobask.com/v1/recommendations/dcom-personas?client_id=' + json.client_id,
+			url: 'https://api.gobask.com/v1/recommendations/dcom-personas?client_id=' + json.client_id,
 			dataType: 'json'
 		}).done(function(json) {
 			personas = json;
