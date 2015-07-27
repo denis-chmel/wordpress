@@ -478,7 +478,7 @@
 		var json = getCurrentJson();
 		json.user_id = $(this).val() || 0;
 
-		if (json.user_id) {
+		if (json.user && json.user_id) {
 			json.user.liked = [];
 			json.user.ordered = [];
 		}
